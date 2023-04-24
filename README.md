@@ -2,6 +2,9 @@
 
 A simple weather app built with React that fetches weather data from the OpenWeatherMap API.
 
+[Launch Live Preview](https://radiant-dieffenbachia-3e17b2.netlify.app//)
+
+
 ## Table of Contents
 
 - [Features](#features)
@@ -22,7 +25,7 @@ A simple weather app built with React that fetches weather data from the OpenWea
 1. Clone the repository:
 
 ```js
-git clone https://github.com/mmartins23/bmi-calculator-react`
+git clone https://github.com/mmartins23/weather-app-react`
 ```
 
 2. Navigate into the project directory:
