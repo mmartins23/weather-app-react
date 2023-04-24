@@ -1,70 +1,159 @@
-# Getting Started with Create React App
+# Weather App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A simple weather app built with React that fetches weather data from the OpenWeatherMap API.
 
-## Available Scripts
+## Table of Contents
 
-In the project directory, you can run:
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Documentation](#documentation)
+- [Technologies Used](#technologies-used)
+- [License](#license)
+- [Contact](#contact)
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Search for weather data by location
+- Display current temperature, feels like temperature, and weather condition
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Installation
 
-### `npm test`
+1. Clone the repository:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```js
+git clone https://github.com/mmartins23/bmi-calculator-react`
+```
 
-### `npm run build`
+2. Navigate into the project directory:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```js
+cd bmi-calculator-react
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. Install the dependencies:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```js
+npm install
+```
 
-### `npm run eject`
+4. Run the project:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```js
+npm start
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+5. Open your browser and navigate to **`http://localhost:3000`** to see the BMI calculator app in action.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Technologies
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- React
+- CSS
+- OpenWeatherMap API
 
-## Learn More
+## Usage
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+* Enter a location in the search box and press enter or click the search button.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+* The app will display the current temperature, feels like temperature, and weather condition for that location.
 
-### Code Splitting
+## Documentation
+Here's a more detailed explanation of how the useEffect hook and other functions work in the Weather App, along with code examples:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```js
+import React, { useState, useEffect } from 'react';
+import bg from './assets/sunset.jpg'
+import './App.css';
 
-### Analyzing the Bundle Size
+function App() {
+  // component state variables
+  const [location, setLocation] = useState('');
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+  // OpenWeatherMap API key
+  const api_key = 'd776189bac1375a2c717c4b200f976ce';
 
-### Making a Progressive Web App
+  // useEffect hook that fetches weather data from OpenWeatherMap API
+  useEffect(() => {
+    async function fetchData() {
+      if (location) {
+        setLoading(true);
+        setError(null);
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${api_key}`;
 
-### Advanced Configuration
+        try {
+          const response = await fetch(url);
+          const data = await response.json();
+          setData(data);
+          console.log(data);
+        } catch (error) {
+          setError(error);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setData(null);
+      }
+    }
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+    fetchData();
+  }, [location, api_key]);
+```
+The **`useEffect`** hook is used to fetch weather data from the OpenWeatherMap API. It is called every time the **`location`** and **`api_key`** variables change.
 
-### Deployment
+The hook uses an **`async`** function called **`fetchData()`** to make the API call. If the **`location`** variable is not empty, **`fetchData()`** sets the **`loading`** state variable to **`true`**, resets the **`error`** state variable to **`null`**, and creates a URL for the API call using the **`location`** and **`api_key`** variables.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+The **`fetch()`** function is then called with the URL, and the response is converted to JSON using the **`json()`** method. If the API call is successful, the **`data`** state variable is set to the JSON response, and the **`console.log()`** function is called to log the data to the console.
 
-### `npm run build` fails to minify
+If there is an error with the API call, the **`setError()`** function is called with the error message returned by the API call. Finally, the **`loading`** state variable is set to **`false`**.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+If the **`location`** variable is empty, the **`setData()`** function is called with a **`null`** value, which clears the **`data`** state variable.
+
+```js
+  // event handler for updating location state
+  const handleLocationChange = (event) => {
+    setLocation(event.target.value);
+  };
+```
+The **`handleLocationChange()`** function is called when the user types in the search input. It sets the **`location`** state variable to the value of the input.
+
+```js
+  // render weather app interface
+  return (
+    <div className='app' style={{ backgroundImage: `url(${bg})` }}>
+      <div className='container'>
+        <h1 className='title'>Weather App</h1>
+        <div className='search-container'>
+          <input
+            type='text'
+            placeholder='Enter a location'
+            value={location}
+            onChange={handleLocationChange}
+          />
+        </div>
+        {loading && <p>Loading...</p>}
+        {error && <p>{error.message}</p>}
+        {data && data.main && (
+          <div className='data-container'>
+            <h2>{data.name}</h2>
+            <p>Temperature: {data.main.temp} °F</p>
+            <p>Feels like: {data.main.feels_like}
+```
+
+## License
+
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+This project is licensed under the terms of the MIT license. See [LICENSE](LICENSE) for more information.
+
+
+
+## Contact
+
+You can reach me on [Twitter](https://twitter.com/23mmartins)
+
+
+Feel free to send me a message if you have any questions or feedback about this project. I'll do my best to respond as soon as possible.
